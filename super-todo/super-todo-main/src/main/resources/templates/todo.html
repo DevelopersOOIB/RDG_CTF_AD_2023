@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns="http://www.w3.org/1999/html">
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>todo</title>
+    <th:block th:insert="~{parts/base::link}"></th:block>
+    <link th:href="@{/internal/css/todo.css}" rel="stylesheet"/>
+    <script type="text/javascript" th:src="@{/internal/js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/internal/js/todo.js}"></script>
+</head>
+<body>
+    <div class="bg-white rounded-5">
+        <section class="vh-100">
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col">
+                        <div class="card" id="list1" style="border-radius: .75rem; background-color: #eff1f2;">
+                            <div class="card-body py-4 px-4 px-md-5">
+                                <div class="d-flex flex-row">
+                                    <div class="me-3">
+                                        <a href="javascript: document.logoutForm.submit()">
+                                            <i class="fas fa-address-card"></i>
+                                            Logout
+                                        </a>
+                                        <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                                            <input hidden type="submit" value="Sign Out"/>
+                                        </form>
+                                    </div>
+                                    <div class="me-3">
+                                        <a href="/settings">
+                                            <i class="fas fa-gear"></i>
+                                            Settings
+                                        </a>
+                                    </div>
+                                    <div class="me-5">
+                                        <a href="#!" class="link-secondary">
+                                            <i class="fas fa-user"></i>
+                                            <th:block sec:authentication="name"/>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <p class="h1 text-center mt-3 mb-4 pb-3 text-primary">
+                                    <i class="fas fa-check-square me-1"></i>
+                                    <u>It's super todo-s</u>
+                                </p>
+
+                                <div sec:authorize="hasRole('USER')" class="pb-2">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <form class="h-flex flex-box align-items-center" th:action="@{/notes}" th:object="${noteCreate}" method="post">
+                                                <input type="text" th:field="*{title}" class="form-control" style="border: none" id="title-input" placeholder="What's it about...">
+                                                <hr class="my-3">
+                                                <input type="text"  class="form-control" th:field="*{link}" style="border: none" id="link-input" placeholder="Resource link (optional)...">
+                                                <div id="check-link-message"></div>
+                                                <hr class="my-3">
+                                                <textarea type="text" th:field="*{textBody}" class="form-control" style="border: none" id="text-body-input" placeholder="What do your need to do..."></textarea>
+                                                <hr class="my-3">
+                                                <div style="float: right">
+                                                    <button type="button" class="btn btn-primary btn-lg me-2"  id="check-link-button" onclick="check_link_availability()">Check link</button>
+                                                    <button type="submit" class="btn btn-primary btn-lg me-2" id="send-note-button" >Make todo</button>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="my-4">
+
+                                <div class="d-flex justify-content-end align-items-center mb-4 pt-2 pb-3">
+                                    <p class="small mb-0 me-2 text-muted">Filter</p>
+                                    <select class="select" id="filter-select" onchange="get_filtering_and_sorting_notes()">
+                                        <option
+                                                th:each="filter : ${T(com.mvp.supertodo.enums.NoteFilterEnum).values()}"
+                                                th:value="${filter}"
+                                                th:text="${filter.value}"
+                                        ></option>
+                                    </select>
+                                    <p class="small mb-0 ms-4 me-2 text-muted">Sort</p>
+                                    <select class="select" id="sorter-select" onchange="get_filtering_and_sorting_notes()">
+                                        <option
+                                                th:each="sort : ${T(com.mvp.supertodo.enums.NoteSortEnum).values()}"
+                                                th:value="${sort}"
+                                                th:text="${sort.value}"
+                                        ></option>
+                                    </select>
+                                    <a href="#!" style="color: #23af89;" data-mdb-toggle="tooltip" title="Ascending"><i
+                                            class="fas fa-sort-amount-down-alt ms-2"></i></a>
+                                </div>
+
+                                <div id="content">
+                                    <th:block th:insert="~{parts/notes::list}"></th:block>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

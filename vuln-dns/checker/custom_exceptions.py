@@ -1,0 +1,4 @@
+
+
+class SSHUnavailable(Exception):
+    pass

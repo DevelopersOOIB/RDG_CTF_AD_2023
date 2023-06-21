@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Change password</title>
+    <th:block th:insert="~{parts/base::link}"></th:block>
+</head>
+<body>
+    <div class="bg-white rounded-5">
+        <section class="vh-100">
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col">
+                        <div class="card" id="list1" style="border-radius: .75rem; background-color: #eff1f2;">
+                            <div class="card-body py-4 px-4 px-md-5">
+
+                                <div class="d-flex flex-row">
+                                    <div class="me-3">
+                                        <a href="javascript: document.logoutForm.submit()">
+                                            <i class="fas fa-address-card"></i>
+                                            Logout
+                                        </a>
+                                        <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                                            <input hidden type="submit" value="Sign Out"/>
+                                        </form>
+                                    </div>
+
+                                    <div class="me-3">
+                                        <a href="/todo">
+                                            <i class="fas fa-house"></i>
+                                            Back
+                                        </a>
+                                    </div>
+
+                                    <div class="me-5">
+                                        <a href="#!" class="link-secondary">
+                                            <i class="fas fa-user"></i>
+                                            <th:block sec:authentication="name"/>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <p class="h1 text-center mt-3 mb-4 pb-3 text-primary">
+                                    <i class="fas fa-gears me-1"></i>
+                                    <u>Settings</u>
+                                </p>
+
+
+                                <div class=" d-flex justify-content-center">
+                                    <div style="width: 26rem; margin-top: 50px;">
+
+                                        <div  th:if="${pwdChanged}" class="alert alert-dismissible fade show alert-success" role="alert">
+                                            <strong>Success!</strong> Password has been changed
+                                            <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+
+                                        <th:block>
+                                            <form th:action="@{/users/pwd-change}" th:object="${passwordUpdate}" method="post">
+                                                <!-- Old password input -->
+                                                <div class="form-floating mb-2">
+                                                    <input type="password" th:field="*{oldPassword}" th:attr="value = *{oldPassword}" id="oldPassword" class="form-control" />
+                                                    <label for="oldPassword">Old password</label>
+
+                                                    <div  th:if="${#fields.hasErrors('oldPassword')}" class="alert alert-dismissible fade show alert-danger" role="alert">
+                                                        <strong>Error!</strong> <th:block th:errors="*{oldPassword}"></th:block>
+                                                        <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- New password input -->
+                                                <div class="form-floating mb-2">
+                                                    <input type="password" class="form-control" th:field="*{newPassword}" id="newPassword"/>
+                                                    <label for="newPassword">New password</label>
+                                                    <div  th:if="${#fields.hasErrors('newPassword')}" class="alert alert-dismissible fade show alert-danger" role="alert">
+                                                        <strong>Errors!</strong>
+                                                        <th:block th:errors="*{newPassword}"></th:block>
+                                                        <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Submit button -->
+                                                <button type="submit" class="btn btn-primary btn-block mb-3">Change password</button>
+                                            </form>
+                                        </th:block>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

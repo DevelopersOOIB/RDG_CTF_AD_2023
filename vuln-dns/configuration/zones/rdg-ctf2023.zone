@@ -1,0 +1,11 @@
+$TTL    1d
+@       IN      SOA     ns1.rdg-ctf2023.local. root.rdg-ctf2023.local. (
+                  1      ; Serial
+                  1d     ; Refresh
+                  1h     ; Retry
+                  1w     ; Expire
+                  1h )   ; Negative Cache TTL
+
+; name servers - NS records
+          IN      NS      ns1.rdg-ctf2023.local.
+ns1 86400 IN      A       127.0.0.1

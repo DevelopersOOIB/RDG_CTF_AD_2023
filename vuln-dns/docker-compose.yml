@@ -1,0 +1,11 @@
+bind:
+  build: .
+  container_name: 'custom-bind'
+
+  ports:
+  - 53:53/udp
+  - 53:53/tcp
+
+  volumes:
+  - ./configuration/named.conf:/etc/bind/named.conf
+  - ./configuration/zones/rdg-ctf2023.zone:/etc/bind/zones/rdg-ctf2023.zone

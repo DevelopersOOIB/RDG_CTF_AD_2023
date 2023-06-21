@@ -1,0 +1,32 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <th:block th:fragment="link">
+        <!--     Font Awesome-->
+        <link th:href="@{/external/fontawesome/css/all.css}" rel="stylesheet"/>
+        <!-- Google Fonts -->
+        <link th:href="@{/external/google/fonts.css}" rel="stylesheet"/>
+        <!-- MDB -->
+        <link th:href="@{/external/mdb/css/mdb.min.css}" rel="stylesheet"/>
+        <!-- MDB -->
+        <script type="text/javascript" th:src="@{/external/mdb/js/mdb.min.js}"></script>
+    </th:block>
+
+    <th:block th:fragment="body">
+        <div class="bg-white rounded-5">
+            <section class="vh-100">
+                <div class="container py-5 h-100">
+                    <div class="row d-flex justify-content-center align-items-center h-100">
+                        <div class="col">
+                            <div class="card" id="list1" style="border-radius: .75rem; background-color: #eff1f2;">
+                                <div class="card-body py-4 px-4 px-md-5">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </th:block>
+</body>
+</html>

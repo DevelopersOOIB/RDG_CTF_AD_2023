@@ -1,0 +1,50 @@
+version: "3.9"
+services:
+  web:
+    container_name: custom-web
+    build: .
+    ports:
+      - "5000:5000"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+    env_file:
+      - ./.env
+    depends_on:
+      - elasticsearch
+      - postgres
+
+  elasticsearch:
+    container_name: custom-es
+    image: elasticsearch:8.7.1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    environment:
+      - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS=-Xms1024m -Xmx1024m
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 2048M
+    ports:
+      - "9200:9200"
+
+  postgres:
+    container_name: custom-db
+    image: postgres:alpine3.16
+    command: postgres -c 'max_connections=400'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./.env.db
+
+volumes:
+  postgres_data:
+    driver: local
+  esdata:
+    driver: local

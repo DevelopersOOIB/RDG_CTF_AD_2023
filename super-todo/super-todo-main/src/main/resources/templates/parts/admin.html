@@ -1,0 +1,53 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <th:block th:fragment="admin-panel">
+        <ul th:each="note : ${notes}">
+            <div class="list-group list-group-horizontal rounded-0 bg-transparent">
+                <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
+                    <input
+                            class="form-check-input me-0"
+                            type="checkbox"
+                            id="flexCheckChecked1" aria-label="..."
+                            th:attrappend="checked=${note.isCompleted} ? 'true'"
+                            onchange="this.form.submit()"
+                            disabled
+                    />
+                </li>
+
+                <li class="list-group-item form-floating px-0 py-4 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
+                    <input
+                            class="lead fw-normal mb-0 bg-light w-100 form-control-lg"
+                            th:classappend="${note.isCompleted} ? 'crossed-out'"
+                            th:value="${note.textBody}"
+                            th:id="'note-' + ${note.id}"
+                            disabled
+                    >
+                    <label th:for="'note-' + ${note.id}">
+                        <span class="badge badge-primary" th:text="${note.title}">Title</span>
+                    </label>
+                </li>
+
+                <li class="list-group-item ps-3 pe-0 py-4 rounded-0 border-0 bg-transparent">
+                    <div class="d-flex flex-row justify-content-end mb-1 mt-1">
+                        <form th:action="@{'/notes/' + ${note.id}}" th:method="get">
+                            <button type="submit" class="text-info bg-transparent" id="button-view-note" title="View note">
+                                <i class="fas fa-book me-3"></i>
+                            </button>
+                        </form>
+                        <form th:action="@{'/notes/' + ${note.id}}" th:method="delete">
+                            <button type="submit" class="text-danger bg-transparent" title="Delete todo">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="text-end text-muted">
+                        <a href="#!" class="text-muted" data-mdb-toggle="tooltip" title="Created date">
+                            <p class="small mb-0" th:text="${note.timestamp.toLocalDate()}"><i class="fas fa-info-circle me-2"></i></p>
+                        </a>
+                    </div>
+                </li>
+            </div>
+        </ul>
+    </th:block>
+</body>
+</html>

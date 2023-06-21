@@ -1,0 +1,87 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="list" th:id="${'note-list'}">
+            <ul
+                th:each="note : ${notes}"
+                th:id="${note.id}"
+                th:attr="
+                    created-at=${note.timestamp},
+                    completed-at=${note.completedAt}"
+            >
+                <div class="accordion accordion-flush d-flex">
+                    <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
+                        <input
+                                class="form-check-input me-0"
+                                type="checkbox"
+                                aria-label="Completion status"
+                                th:id="'check-input-' + ${note.id}"
+                                th:value="'/notes/' + ${note.id} +  '/toggle'"
+                                th:attr="
+                                    checked=${note.isCompleted} ? 'true',
+                                    target-button-heading='button-heading-' + ${note.id}"
+                                onchange="toggle_completion_status(this)"
+                        />
+                    </li>
+                    <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
+                        <div class="accordion-item lead fw-normal mb-0 bg-light w-100 ms-n2 ps-2 py-1 rounded">
+                            <h2 class="accordion-header" th:id="'flush-heading-' + ${note.id}">
+                                <button
+                                    class="accordion-button collapsed"
+                                    type="button"
+                                    data-mdb-toggle="collapse"
+                                    aria-expanded="false"
+                                    th:classappend="${note.isCompleted} ? 'crossed-out'"
+                                    th:id="'button-heading-' + ${note.id}"
+                                    th:attr="
+                                        data-mdb-target='#flush-collapse-' + ${note.id},
+                                        aria-controls='flush-collapse-' + ${note.id}"
+                                    >
+                                    <th:block th:text="${note.title}"></th:block>
+                                </button>
+                            </h2>
+                            <div
+                                th:id="'flush-collapse-' + ${note.id}"
+                                class="accordion-collapse collapse"
+                                data-mdb-parent="#accordionFlushExample"
+                                th:attr="
+                                    data-mdb-parent='flush-heading-' + ${note.id},
+                                    aria-labelledby='flush-heading-' + ${note.id}"
+                            >
+                                <div class="accordion-body">
+                                    <p th:text="${note.textBody}"></p>
+                                    <a th:if="${note.link}"  class="h6" th:href="${note.link}">
+                                        <i class="fas fa-link"></i> Linked resource
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
+                        <div class="d-flex flex-row justify-content-end mb-1 mt-1">
+                            <form th:action="@{'/notes/' + ${note.id}}" th:object="${noteUpdate}" th:method="post">
+                                <button type="submit" class="text-info bg-transparent" id="button-update-note" title="Edit todo">
+                                    <i class="fas fa-pencil-alt me-3"></i>
+                                </button>
+                            </form>
+                            <button
+                                    type="submit"
+                                    class="text-danger bg-transparent"
+                                    title="Delete todo"
+                                    th:attr="url='/notes/' + ${note.id}"
+                                    onclick="delete_note_item(this)"
+                            >
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                        <div class="text-end text-muted">
+                            <a href="#!" class="text-muted" data-mdb-toggle="tooltip" title="Created date">
+                                <p class="small mb-0" th:text="${note.timestamp.toLocalDate()}"><i class="fas fa-info-circle me-2"></i></p>
+                            </a>
+                        </div>
+                    </li>
+                </div>
+            </ul>
+        </div>
+    </body>
+</html>

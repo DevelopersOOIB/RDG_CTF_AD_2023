@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  crypto:
+    container_name: crypto
+    build: .
+    ports:
+      - "9990:9990"
+      - "7777:7777"
+    restart: always

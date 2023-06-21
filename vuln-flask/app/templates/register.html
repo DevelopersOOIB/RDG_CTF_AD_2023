@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <div class="container">
+      <form class="form-signin" method="post">
+        <h2 class="form-signin-heading">Please sign in</h2>
+          <p>
+              {{ form.username(size=32, class_='form-control') }}
+              {% for error in form.username.errors %}
+              <span style="color: red;">[{{ error }}]</span>
+              {% endfor %}
+          </p>
+          <p>
+              {{ form.password(size=32, class_='form-control') }}
+              {% for error in form.password.errors %}
+              <span style="color: red;">[{{ error }}]</span>
+              {% endfor %}
+          </p>
+          <p>
+              {{ form.password2(size=32, class_='form-control') }}
+              {% for error in form.password2.errors %}
+              <span style="color: red;">[{{ error }}]</span>
+              {% endfor %}
+          </p>
+          <p>{{ form.submit(class_='btn btn-lg btn-dark btn-block') }}</p>
+      </form>
+    </div>
+{% endblock %}

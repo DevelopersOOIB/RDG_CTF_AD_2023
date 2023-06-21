@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <div class="container">
+        <h1>Profile: {{ current_user.username }}</h1>
+        <form class="form-signin" method="post">
+            <p>
+                {{ form.username.label }}<br>{{ form.username(size=32, class_='form-control') }}
+                {% for error in form.username.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.email.label }}<br>{{ form.email(size=32, class_='form-control') }}
+                {% for error in form.email.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.bio.label }}<br>{{ form.bio(size=32) }}
+                {% for error in form.bio.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit(class_='btn btn-lg btn-dark btn-block') }}</p><br>
+        </form>
+        <input type="hidden" id="userid" name="userid" value="{{current_user.id}}" />
+    </div>
+
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/js.cookie.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#submit').click(function(e) {
+            e.preventDefault();
+
+            var userid = $('#userid').val()
+            var username = $('#username').val()
+            var email = $('#email').val()
+            var bio = $('#bio').val()
+
+            var xmlString = "<root>" +
+            "  <user>" +
+            "<username>" + escape(username) + "</username>" +
+            "<email>" + escape(email) + "</email>" +
+            "<bio>" + escape(bio) + "</bio>" +
+            "</user>" +
+            "</root>";
+
+            $.ajax({
+                    url: "/api/profile/{{current_user.id}}",
+                    type: "PUT",
+                    contentType: "application/xml",
+                    data: xmlString,
+                    beforeSend: function (xhr) {
+                        var access_token = 'Bearer ' + Cookies.get('access_token');
+                        xhr.setRequestHeader('Authorization', access_token);
+                    },
+                    success: function (response) {
+                        FlashMessage("Profile was successfully changed")
+                    },
+                    error: function (response) {
+                        FlashMessage(response.responseJSON.message);
+                    }
+                });
+        });
+    });
+
+        function FlashMessage(message) {
+            var alert = document.getElementById("alert");
+            alert.innerHTML += '<div class="alert alert-info" role="alert">' + message + '</div>';
+        };
+    </script>
+{% endblock %}
